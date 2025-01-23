@@ -2,21 +2,22 @@ FROM php:5.6-fpm
 
 RUN useradd -u 1000 local
 
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+RUN echo "deb http://archive.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list
+
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
-        libpng12-dev \
+        libpng-dev \
         apt-utils \
         libxml2-dev \
         zlib1g-dev \
         zip \
-        php-http \
-        php5-dev \
         libcurl3 \
         libpcre3-dev \
         libcurl4-openssl-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt pdo_mysql mbstring \
+    && docker-php-ext-install -j$(nproc) iconv mcrypt pdo_mysql mysqli mbstring \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install soap
